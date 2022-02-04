@@ -1,0 +1,1094 @@
+[
+    {
+        "id": "32e7fd2e8699cdc3",
+        "type": "tab",
+        "label": "cube",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "fea9d5d343baed97",
+        "type": "function",
+        "z": "32e7fd2e8699cdc3",
+        "name": "",
+        "func": "const xform ={\n    slide:\"slid\",\n    flip90:\"tipped\",\n    flip180:\"flipped\",\n    tap:\"tapped\",\n    fall:\"dropped\",\n    shake:\"shaken\"\n}\n\n\n\n\n\n\n\nlet message = \"The cube was \"+xform[msg.payload];\n//node.warn(\"The payload was \"+msg.payload);\nswitch (msg.payload){\n    case \"slide\":\n        message+=\". Face \"+ msg.data.side+\" was up.\";\n        break;\n    case \"flip90\":\n        message+=\". It was tipped from \"+ msg.data.fromside+\" to \"+msg.data.side+\".\";\n        break;\n    case \"flip180\":\n        message+=\". It was flipped to face \"+msg.data.side+\".\";\n        break;    \n    case \"tap\":\n        message+=\". Face \"+msg.data.side+\" was up.\";\n        break;\n    case \"fall\":\n        message+=\". Ouch!\";\n        break;\n     case \"shake\":\n        message+=\".  I am dizzy\";\n        break;    \n    default:\n      message=\"\"\n}\nif( message===\"\"){\n    return null;\n}else{\nmsg.payload=message;\nreturn msg;\n}",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 440,
+        "y": 460,
+        "wires": [
+            [
+                "d4a6fa27bb078307"
+            ]
+        ]
+    },
+    {
+        "id": "4b5d69c90f06f3de",
+        "type": "api-current-state",
+        "z": "32e7fd2e8699cdc3",
+        "name": "",
+        "server": "b48374b9.3eaa48",
+        "version": 3,
+        "outputs": 1,
+        "halt_if": "",
+        "halt_if_type": "str",
+        "halt_if_compare": "is",
+        "entity_id": "{{destination_id}}",
+        "state_type": "str",
+        "blockInputOverrides": false,
+        "outputProperties": [
+            {
+                "property": "payload",
+                "propertyType": "msg",
+                "value": "",
+                "valueType": "entityState"
+            },
+            {
+                "property": "data",
+                "propertyType": "msg",
+                "value": "",
+                "valueType": "entity"
+            }
+        ],
+        "for": 0,
+        "forType": "num",
+        "forUnits": "minutes",
+        "override_topic": false,
+        "state_location": "payload",
+        "override_payload": "msg",
+        "entity_location": "data",
+        "override_data": "msg",
+        "x": 870,
+        "y": 720,
+        "wires": [
+            [
+                "241c1765e0d1c20a"
+            ]
+        ]
+    },
+    {
+        "id": "241c1765e0d1c20a",
+        "type": "api-call-service",
+        "z": "32e7fd2e8699cdc3",
+        "name": "",
+        "server": "b48374b9.3eaa48",
+        "version": 3,
+        "debugenabled": false,
+        "service_domain": "light",
+        "service": "turn_on",
+        "entityId": "{{destination_id}}",
+        "data": "{\t\"brightness\":data.attributes.brightness+50\t}",
+        "dataType": "jsonata",
+        "mergecontext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [],
+        "queue": "none",
+        "x": 1190,
+        "y": 720,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "9ea6e316721aa311",
+        "type": "api-current-state",
+        "z": "32e7fd2e8699cdc3",
+        "name": "",
+        "server": "b48374b9.3eaa48",
+        "version": 3,
+        "outputs": 1,
+        "halt_if": "",
+        "halt_if_type": "str",
+        "halt_if_compare": "is",
+        "entity_id": "{{destination_id}}",
+        "state_type": "str",
+        "blockInputOverrides": false,
+        "outputProperties": [
+            {
+                "property": "payload",
+                "propertyType": "msg",
+                "value": "",
+                "valueType": "entityState"
+            },
+            {
+                "property": "data",
+                "propertyType": "msg",
+                "value": "",
+                "valueType": "entity"
+            }
+        ],
+        "for": 0,
+        "forType": "num",
+        "forUnits": "minutes",
+        "override_topic": false,
+        "state_location": "payload",
+        "override_payload": "msg",
+        "entity_location": "data",
+        "override_data": "msg",
+        "x": 910,
+        "y": 960,
+        "wires": [
+            [
+                "8da4dcd6617de501"
+            ]
+        ]
+    },
+    {
+        "id": "8da4dcd6617de501",
+        "type": "api-call-service",
+        "z": "32e7fd2e8699cdc3",
+        "name": "",
+        "server": "b48374b9.3eaa48",
+        "version": 3,
+        "debugenabled": false,
+        "service_domain": "light",
+        "service": "turn_on",
+        "entityId": "{{destination_id}}",
+        "data": "{\t\"brightness\":data.attributes.brightness-50\t}",
+        "dataType": "jsonata",
+        "mergecontext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [],
+        "queue": "none",
+        "x": 1210,
+        "y": 960,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "8e45263d55c458b6",
+        "type": "change",
+        "z": "32e7fd2e8699cdc3",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "destination1",
+                "pt": "flow",
+                "to": "data.side",
+                "tot": "msg"
+            },
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "data.side",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 900,
+        "y": 460,
+        "wires": [
+            [
+                "85adf673709b49eb"
+            ]
+        ]
+    },
+    {
+        "id": "e80f5a2eb38b7d5c",
+        "type": "function",
+        "z": "32e7fd2e8699cdc3",
+        "name": "",
+        "func": "dest={\n    1:\"light.lr_1\",\n    2:\"light.lr2\",\n    3:\"light.lr3\",\n    4:\"light.office_light\",\n    5:\"light.livingroom_group\",\n    6:\"denon\"\n}\nlet destination=flow.get(\"destination1\")||5;\nmsg.destination_id=dest[destination];\nnode.warn(msg.destination_id);\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 300,
+        "y": 840,
+        "wires": [
+            [
+                "07f2d363c8e6a3e6"
+            ]
+        ]
+    },
+    {
+        "id": "0f40c75ac8b6db14",
+        "type": "function",
+        "z": "32e7fd2e8699cdc3",
+        "name": "",
+        "func": "dest={\n    1:\"light.lr_1\",\n    2:\"light.lr2\",\n    3:\"light.lr3\",\n    4:\"light.office_light\",\n    5:\"light.livingroom_group\",\n    6:\"denon\"\n}\nlet destination=flow.get(\"destination1\")||5;\nmsg.destination_id=dest[destination];\n//node.warn(msg.destination_id);\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 320,
+        "y": 680,
+        "wires": [
+            [
+                "e416b2dc71ca1588"
+            ]
+        ]
+    },
+    {
+        "id": "e416b2dc71ca1588",
+        "type": "switch",
+        "z": "32e7fd2e8699cdc3",
+        "name": "lights or sound",
+        "property": "destination_id",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "denon",
+                "vt": "str"
+            },
+            {
+                "t": "neq",
+                "v": "denon",
+                "vt": "str"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 2,
+        "x": 500,
+        "y": 680,
+        "wires": [
+            [
+                "0dec82f2abc258eb"
+            ],
+            [
+                "4b5d69c90f06f3de"
+            ]
+        ]
+    },
+    {
+        "id": "2f655f2086123273",
+        "type": "tcp request",
+        "z": "32e7fd2e8699cdc3",
+        "name": "Query Denon for current volume",
+        "server": "192.168.0.132",
+        "port": "23",
+        "out": "count",
+        "ret": "buffer",
+        "splitc": "5",
+        "x": 1050,
+        "y": 600,
+        "wires": [
+            [
+                "3cadabc4969df424"
+            ]
+        ]
+    },
+    {
+        "id": "3cadabc4969df424",
+        "type": "function",
+        "z": "32e7fd2e8699cdc3",
+        "name": "Extract Current Volume",
+        "func": "const regex=/[A-Z.]/g;\nmsg.payload=parseInt(msg.payload.toString().replace(regex,\"\"));\nmsg.payload+=5;\nif((msg.payload>=100)){\n    msg.payload=Math.round(msg.payload/10);\n}\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1350,
+        "y": 600,
+        "wires": [
+            [
+                "34f843f4e41dafe4"
+            ]
+        ]
+    },
+    {
+        "id": "34f843f4e41dafe4",
+        "type": "function",
+        "z": "32e7fd2e8699cdc3",
+        "name": "payload to set Volume",
+        "func": "var pl=msg.payload.toString();\nwhile (pl.length<2){\n    pl=\"0\"+pl;\n}\nmsg.topic=\"\";\nmsg.payload=\"MV\"+pl;\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1580,
+        "y": 700,
+        "wires": [
+            [
+                "91368f14265b5e08"
+            ]
+        ]
+    },
+    {
+        "id": "91368f14265b5e08",
+        "type": "tcp request",
+        "z": "32e7fd2e8699cdc3",
+        "name": "Telnet to Denon",
+        "server": "192.168.0.132",
+        "port": "23",
+        "out": "time",
+        "ret": "buffer",
+        "splitc": "500",
+        "x": 1780,
+        "y": 700,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "07f2d363c8e6a3e6",
+        "type": "switch",
+        "z": "32e7fd2e8699cdc3",
+        "name": "lights or sound",
+        "property": "destination_id",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "denon",
+                "vt": "str"
+            },
+            {
+                "t": "neq",
+                "v": "denon",
+                "vt": "str"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 2,
+        "x": 500,
+        "y": 840,
+        "wires": [
+            [
+                "4749ccf1af3007b1"
+            ],
+            [
+                "9ea6e316721aa311"
+            ]
+        ]
+    },
+    {
+        "id": "8457008b9ba6b519",
+        "type": "tcp request",
+        "z": "32e7fd2e8699cdc3",
+        "name": "Query Denon for current volume",
+        "server": "192.168.0.132",
+        "port": "23",
+        "out": "count",
+        "ret": "buffer",
+        "splitc": "5",
+        "x": 1050,
+        "y": 840,
+        "wires": [
+            [
+                "dc038cdf86ec3d01"
+            ]
+        ]
+    },
+    {
+        "id": "dc038cdf86ec3d01",
+        "type": "function",
+        "z": "32e7fd2e8699cdc3",
+        "name": "Extract Current Volume",
+        "func": "const regex=/[A-Z.]/g;\nmsg.payload=parseInt(msg.payload.toString().replace(regex,\"\"))-5;\nif((msg.payload>=100)){\n    msg.payload=Math.round(msg.payload/10);\n}\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1330,
+        "y": 840,
+        "wires": [
+            [
+                "34f843f4e41dafe4"
+            ]
+        ]
+    },
+    {
+        "id": "0dec82f2abc258eb",
+        "type": "change",
+        "z": "32e7fd2e8699cdc3",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "MV?",
+                "tot": "str"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 770,
+        "y": 600,
+        "wires": [
+            [
+                "2f655f2086123273"
+            ]
+        ]
+    },
+    {
+        "id": "4749ccf1af3007b1",
+        "type": "change",
+        "z": "32e7fd2e8699cdc3",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "MV?",
+                "tot": "str"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 770,
+        "y": 840,
+        "wires": [
+            [
+                "8457008b9ba6b519"
+            ]
+        ]
+    },
+    {
+        "id": "5d218e1c4125cef9",
+        "type": "inject",
+        "z": "32e7fd2e8699cdc3",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": true,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 150,
+        "y": 300,
+        "wires": [
+            [
+                "256f31a4e231baf0"
+            ]
+        ]
+    },
+    {
+        "id": "256f31a4e231baf0",
+        "type": "change",
+        "z": "32e7fd2e8699cdc3",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "destination1",
+                "pt": "flow",
+                "to": "6",
+                "tot": "str"
+            },
+            {
+                "t": "set",
+                "p": "device",
+                "pt": "flow",
+                "to": "m1_magic_cube",
+                "tot": "str"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 360,
+        "y": 300,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "dc2c09242b0aa93b",
+        "type": "mqtt in",
+        "z": "32e7fd2e8699cdc3",
+        "name": "",
+        "topic": "zigbee2mqtt/Magic Cube 1/#",
+        "qos": "2",
+        "datatype": "auto",
+        "broker": "39733c114284c3df",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 160,
+        "y": 80,
+        "wires": [
+            [
+                "5f0bea67cece17e0"
+            ]
+        ]
+    },
+    {
+        "id": "f96e0a9d4b96a54f",
+        "type": "function",
+        "z": "32e7fd2e8699cdc3",
+        "name": "",
+        "func": "const re =/side/g;\nlet obj=msg.payload;\n let keys=Object.keys(obj);\n// node.warn(keys);\n for (var key in keys){\n    if(keys[key].match(re)){\n      //  node.warn(keys[key] +\" matches\");\n        obj[keys[key]]++;\n    }     \n }\n//node.warn(typeof obj);\n\nlet action=obj[\"action\"];\n//if(obj[\"action\"]===\"\"){\n//    action=\"shaken\";\n//}\n//node.warn(\"action is \"+action +\" in function\");\nlet out =[];\n for(i=0;i<8;i++){\n     out[i]=null;\n}\n     switch( action) {\n    case \"tap\":\n     out[0]={\n              payload:action,\n              data:{\n                  side:obj[\"side\"]\n                 \n             }\n             };\n     break;\n     case \"fall\":\n          out[1]={\n              payload:action,\n              data:{\n                 \n             }\n             };\n        break;\n     case \"flip90\":\n          out[2]={\n              payload:action,\n              data:{\n                  side:obj[\"side\"],\n                  fromside:obj[\"action_from_side\"]\n             }\n             };\n         break;\n     case \"flip180\":\n          out[3]={\n              payload:action,\n              data:{\n                  side:obj[\"side\"]\n             }\n             };\n         break;\n     case \"slide\":\n        node.warn(obj);\n        out[4]={\n              payload:action,\n              data:{\n                  side:obj[\"side\"]\n             }\n             };\n             node.warn(out[4]);\n         break;\n    case \"rotate_left\":\n         out[5]={\n              payload:action,\n              data:{\n                  side:obj[\"side\"],\n                  angle:obj[\"angle\"],\n                  original:obj\n             }\n             };\n        break;\n    case \"rotate_right\":\n          out[6]={\n              payload:action,\n              data:{\n                  side:obj[\"side\"],\n                  angle:obj[\"angle\"],\n                  original:obj\n             }\n             };\n        break;\n        case \"shake\":\n          //  node.warn(\"in shake case\");\n          out[7]={\n              payload:\"shake\",\n              data:{\n                 \n             }\n             };\n        break;\n    default:\n}\nreturn out;\n",
+        "outputs": 8,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 610,
+        "y": 140,
+        "wires": [
+            [
+                "2d09436175ce96fa"
+            ],
+            [
+                "87c022435a5fce1e"
+            ],
+            [
+                "1081d9c316baefb5"
+            ],
+            [
+                "9d77c38180a51555"
+            ],
+            [
+                "d38a3a0f6dc2e326"
+            ],
+            [
+                "25d2d8c44d895d8f"
+            ],
+            [
+                "cedbfbae4f93c7ba"
+            ],
+            [
+                "adf3387811e6b921"
+            ]
+        ]
+    },
+    {
+        "id": "e64c0fd3bd31fe0d",
+        "type": "catch",
+        "z": "32e7fd2e8699cdc3",
+        "name": "",
+        "scope": null,
+        "uncaught": false,
+        "x": 1320,
+        "y": 100,
+        "wires": [
+            [
+                "d049026b4e11e893"
+            ]
+        ]
+    },
+    {
+        "id": "d049026b4e11e893",
+        "type": "debug",
+        "z": "32e7fd2e8699cdc3",
+        "name": "Catch",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1470,
+        "y": 100,
+        "wires": []
+    },
+    {
+        "id": "2d09436175ce96fa",
+        "type": "link out",
+        "z": "32e7fd2e8699cdc3",
+        "name": "tap",
+        "mode": "link",
+        "links": [
+            "5dd4806c47b21829"
+        ],
+        "x": 965,
+        "y": 40,
+        "wires": []
+    },
+    {
+        "id": "25d2d8c44d895d8f",
+        "type": "link out",
+        "z": "32e7fd2e8699cdc3",
+        "name": "rotate left",
+        "mode": "link",
+        "links": [
+            "6203975c671488c0",
+            "5dd4806c47b21829"
+        ],
+        "x": 965,
+        "y": 225.7142857142857,
+        "wires": []
+    },
+    {
+        "id": "cedbfbae4f93c7ba",
+        "type": "link out",
+        "z": "32e7fd2e8699cdc3",
+        "name": "rotate right",
+        "mode": "link",
+        "links": [
+            "89f4c843831f6987",
+            "5dd4806c47b21829"
+        ],
+        "x": 965,
+        "y": 262.85714285714283,
+        "wires": []
+    },
+    {
+        "id": "d38a3a0f6dc2e326",
+        "type": "link out",
+        "z": "32e7fd2e8699cdc3",
+        "name": "slide",
+        "mode": "link",
+        "links": [
+            "23863e0a68de4572",
+            "5dd4806c47b21829"
+        ],
+        "x": 965,
+        "y": 188.57142857142856,
+        "wires": []
+    },
+    {
+        "id": "9d77c38180a51555",
+        "type": "link out",
+        "z": "32e7fd2e8699cdc3",
+        "name": "flip180",
+        "mode": "link",
+        "links": [
+            "23863e0a68de4572",
+            "5dd4806c47b21829"
+        ],
+        "x": 965,
+        "y": 151.42857142857142,
+        "wires": []
+    },
+    {
+        "id": "1081d9c316baefb5",
+        "type": "link out",
+        "z": "32e7fd2e8699cdc3",
+        "name": "flip90",
+        "mode": "link",
+        "links": [
+            "23863e0a68de4572",
+            "5dd4806c47b21829"
+        ],
+        "x": 965,
+        "y": 114.28571428571428,
+        "wires": []
+    },
+    {
+        "id": "87c022435a5fce1e",
+        "type": "link out",
+        "z": "32e7fd2e8699cdc3",
+        "name": "fall",
+        "mode": "link",
+        "links": [
+            "5dd4806c47b21829",
+            "068be72e8e8d0e6b"
+        ],
+        "x": 965,
+        "y": 77.14285714285714,
+        "wires": []
+    },
+    {
+        "id": "6203975c671488c0",
+        "type": "link in",
+        "z": "32e7fd2e8699cdc3",
+        "name": "",
+        "links": [
+            "25d2d8c44d895d8f"
+        ],
+        "x": 145,
+        "y": 680,
+        "wires": [
+            [
+                "0f40c75ac8b6db14"
+            ]
+        ]
+    },
+    {
+        "id": "89f4c843831f6987",
+        "type": "link in",
+        "z": "32e7fd2e8699cdc3",
+        "name": "",
+        "links": [
+            "cedbfbae4f93c7ba"
+        ],
+        "x": 135,
+        "y": 840,
+        "wires": [
+            [
+                "e80f5a2eb38b7d5c"
+            ]
+        ]
+    },
+    {
+        "id": "23863e0a68de4572",
+        "type": "link in",
+        "z": "32e7fd2e8699cdc3",
+        "name": "",
+        "links": [
+            "1081d9c316baefb5",
+            "9d77c38180a51555",
+            "d38a3a0f6dc2e326"
+        ],
+        "x": 695,
+        "y": 460,
+        "wires": [
+            [
+                "8e45263d55c458b6"
+            ]
+        ]
+    },
+    {
+        "id": "5dd4806c47b21829",
+        "type": "link in",
+        "z": "32e7fd2e8699cdc3",
+        "name": "Inpit",
+        "links": [
+            "1081d9c316baefb5",
+            "25d2d8c44d895d8f",
+            "2d09436175ce96fa",
+            "87c022435a5fce1e",
+            "9d77c38180a51555",
+            "adf3387811e6b921",
+            "cedbfbae4f93c7ba",
+            "d38a3a0f6dc2e326"
+        ],
+        "x": 295,
+        "y": 460,
+        "wires": [
+            [
+                "fea9d5d343baed97"
+            ]
+        ]
+    },
+    {
+        "id": "d4a6fa27bb078307",
+        "type": "link out",
+        "z": "32e7fd2e8699cdc3",
+        "name": "",
+        "mode": "link",
+        "links": [
+            "ae12912f7172e647"
+        ],
+        "x": 575,
+        "y": 460,
+        "wires": []
+    },
+    {
+        "id": "adf3387811e6b921",
+        "type": "link out",
+        "z": "32e7fd2e8699cdc3",
+        "name": "shaken",
+        "mode": "link",
+        "links": [
+            "5dd4806c47b21829"
+        ],
+        "x": 965,
+        "y": 300,
+        "wires": []
+    },
+    {
+        "id": "5f0bea67cece17e0",
+        "type": "function",
+        "z": "32e7fd2e8699cdc3",
+        "name": "",
+        "func": "const data=msg.payload;\nlet out;\ntry{\n    out=JSON.parse(data);\n}\ncatch (e){\n //   node.warn(\"exception\" +e);\n  //  node.warn(\"data \" + data);\n    if(data==\"shake\"){\n        out={action:data};\n     }else{\n         msg=null;\n         return msg;\n     }\n}\nmsg.payload=out;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 380,
+        "y": 80,
+        "wires": [
+            [
+                "f96e0a9d4b96a54f"
+            ]
+        ]
+    },
+    {
+        "id": "bfae468464b19a56",
+        "type": "comment",
+        "z": "32e7fd2e8699cdc3",
+        "name": "Audio feedback",
+        "info": "",
+        "x": 450,
+        "y": 400,
+        "wires": []
+    },
+    {
+        "id": "42704cd7c7365ef4",
+        "type": "comment",
+        "z": "32e7fd2e8699cdc3",
+        "name": "Twist CCW",
+        "info": "",
+        "x": 330,
+        "y": 620,
+        "wires": []
+    },
+    {
+        "id": "5437f414824719fe",
+        "type": "comment",
+        "z": "32e7fd2e8699cdc3",
+        "name": "Twist CW",
+        "info": "",
+        "x": 310,
+        "y": 780,
+        "wires": []
+    },
+    {
+        "id": "f9f8cce001ad68a0",
+        "type": "comment",
+        "z": "32e7fd2e8699cdc3",
+        "name": "tap",
+        "info": "",
+        "x": 1078,
+        "y": 40,
+        "wires": []
+    },
+    {
+        "id": "f6312c6389e6b1ae",
+        "type": "comment",
+        "z": "32e7fd2e8699cdc3",
+        "name": "fall",
+        "info": "",
+        "x": 1078,
+        "y": 77.14285714285714,
+        "wires": []
+    },
+    {
+        "id": "3f3811389da794ea",
+        "type": "comment",
+        "z": "32e7fd2e8699cdc3",
+        "name": "flip90",
+        "info": "",
+        "x": 1078,
+        "y": 114.28571428571428,
+        "wires": []
+    },
+    {
+        "id": "add4dcdd04b30486",
+        "type": "comment",
+        "z": "32e7fd2e8699cdc3",
+        "name": "flip180",
+        "info": "",
+        "x": 1078,
+        "y": 151.42857142857142,
+        "wires": []
+    },
+    {
+        "id": "d370bae6d375e785",
+        "type": "comment",
+        "z": "32e7fd2e8699cdc3",
+        "name": "slide",
+        "info": "",
+        "x": 1078,
+        "y": 188.57142857142856,
+        "wires": []
+    },
+    {
+        "id": "28885e6d72a4de25",
+        "type": "comment",
+        "z": "32e7fd2e8699cdc3",
+        "name": "CCW",
+        "info": "",
+        "x": 1078,
+        "y": 225.7142857142857,
+        "wires": []
+    },
+    {
+        "id": "8e6e4022b7778517",
+        "type": "comment",
+        "z": "32e7fd2e8699cdc3",
+        "name": "CW",
+        "info": "",
+        "x": 1078,
+        "y": 262.85714285714283,
+        "wires": []
+    },
+    {
+        "id": "1a1c9d6e3017544d",
+        "type": "comment",
+        "z": "32e7fd2e8699cdc3",
+        "name": "Shake",
+        "info": "",
+        "x": 1078,
+        "y": 300,
+        "wires": []
+    },
+    {
+        "id": "d0f5e9da561cb80c",
+        "type": "comment",
+        "z": "32e7fd2e8699cdc3",
+        "name": "Set a flow variable for which face is up when rotating",
+        "info": "",
+        "x": 890,
+        "y": 400,
+        "wires": []
+    },
+    {
+        "id": "265f57e67060dd39",
+        "type": "comment",
+        "z": "32e7fd2e8699cdc3",
+        "name": "Set inital face when flow starts",
+        "info": "",
+        "x": 240,
+        "y": 240,
+        "wires": []
+    },
+    {
+        "id": "5f7eabffe18376e4",
+        "type": "comment",
+        "z": "32e7fd2e8699cdc3",
+        "name": "Volume",
+        "info": "",
+        "x": 940,
+        "y": 540,
+        "wires": []
+    },
+    {
+        "id": "042e7d0af575b62d",
+        "type": "comment",
+        "z": "32e7fd2e8699cdc3",
+        "name": "Volume",
+        "info": "",
+        "x": 940,
+        "y": 780,
+        "wires": []
+    },
+    {
+        "id": "62d6046009fd44e9",
+        "type": "comment",
+        "z": "32e7fd2e8699cdc3",
+        "name": "Brightness",
+        "info": "",
+        "x": 940,
+        "y": 900,
+        "wires": []
+    },
+    {
+        "id": "e875a012ba913632",
+        "type": "comment",
+        "z": "32e7fd2e8699cdc3",
+        "name": "Brightness",
+        "info": "",
+        "x": 940,
+        "y": 660,
+        "wires": []
+    },
+    {
+        "id": "85adf673709b49eb",
+        "type": "ha-entity",
+        "z": "32e7fd2e8699cdc3",
+        "name": "cube 1 side",
+        "server": "b48374b9.3eaa48",
+        "version": 2,
+        "debugenabled": false,
+        "outputs": 1,
+        "entityType": "sensor",
+        "config": [
+            {
+                "property": "name",
+                "value": "Cube 1 Face"
+            },
+            {
+                "property": "device_class",
+                "value": ""
+            },
+            {
+                "property": "icon",
+                "value": "mdi:nfc-variant"
+            },
+            {
+                "property": "unit_of_measurement",
+                "value": ""
+            },
+            {
+                "property": "state_class",
+                "value": ""
+            },
+            {
+                "property": "last_reset",
+                "value": ""
+            }
+        ],
+        "state": "destination1",
+        "stateType": "flow",
+        "attributes": [],
+        "resend": true,
+        "outputLocation": "payload",
+        "outputLocationType": "none",
+        "inputOverride": "allow",
+        "outputOnStateChange": false,
+        "outputPayload": "$entity().state ? \"on\": \"off\"",
+        "outputPayloadType": "jsonata",
+        "x": 1150,
+        "y": 460,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "b48374b9.3eaa48",
+        "type": "server",
+        "name": "Home Assistant",
+        "version": 2,
+        "addon": false,
+        "rejectUnauthorizedCerts": true,
+        "ha_boolean": "y|yes|true|on|home|open",
+        "connectionDelay": true,
+        "cacheJson": true,
+        "heartbeat": false,
+        "heartbeatInterval": "30"
+    },
+    {
+        "id": "39733c114284c3df",
+        "type": "mqtt-broker",
+        "name": "mosq_ewe",
+        "broker": "mosquitto.lan",
+        "port": "1883",
+        "clientid": "",
+        "autoConnect": false,
+        "usetls": false,
+        "protocolVersion": "4",
+        "keepalive": "60",
+        "cleansession": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthPayload": "",
+        "birthMsg": {},
+        "closeTopic": "",
+        "closeQos": "0",
+        "closePayload": "",
+        "closeMsg": {},
+        "willTopic": "",
+        "willQos": "0",
+        "willPayload": "",
+        "willMsg": {},
+        "sessionExpiry": ""
+    }
+]
